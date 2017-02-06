@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import jfxtras.labs.scene.control.*?>
+<?import jfxtras.labs.scene.control.radialmenu.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import com.jfoenix.validation.*?>
+<?import jfxtras.labs.scene.control.window.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="mainAnchor" fx:id="mainAnchor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GameViewController">
+   <children>
+      <MenuBar id="menuBar" layoutY="2.0" stylesheets="@../application/application.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <StackPane layoutX="121.0" layoutY="266.0" prefHeight="200.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <HBox fx:id="hboxCenter" prefHeight="100.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
+      <StackPane prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <HBox fx:id="hbox2" alignment="BASELINE_CENTER" prefHeight="100.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
+      <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#startGame" styleClass="loginPanel" stylesheets="@../application/application.css" text="Zacznij grę" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="50.0" />
+      <HBox fx:id="hbox" alignment="CENTER" layoutX="300.0" layoutY="10.0" prefHeight="200.0" prefWidth="538.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" />
+      <HBox fx:id="buttons" layoutX="308.0" layoutY="317.0" prefHeight="20.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="450.0">
+         <children>
+            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirm" text="Zatwierdź" />
+            <Button fx:id="takeCardButton" mnemonicParsing="false" onAction="#takeCard" text="Weź kartę" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
