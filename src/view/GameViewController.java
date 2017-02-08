@@ -84,7 +84,7 @@ public class GameViewController {
 				showClientCards();
 				showCardsOnTable();
 				break;
-			case 7:
+			case 7://FOUR is on Table
 				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
 				for(Card card : dataFromServer.getCardsOnTable()){
 					clientData.getCardsOnTable().add(card);
@@ -94,7 +94,7 @@ public class GameViewController {
 				showClientCards();
 				showCardsOnTable();
 				break;
-			case 8:
+			case 8: //take penalty cards packet
 				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
 				for(Card card : dataFromServer.getCardsOnTable()){
 					clientData.getCardsOnTable().add(card);
