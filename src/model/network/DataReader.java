@@ -22,7 +22,6 @@ public class DataReader implements Runnable {
 		
 		while (true) {		
 			try {
-				System.out.println("bedzie czytac");
 				Object readObject = objectInputStream.readObject();
 				DataFromServer dataFromServer = (DataFromServer) readObject;
 				
@@ -35,7 +34,6 @@ public class DataReader implements Runnable {
 							
 					}
 				});
-				System.out.println("odebranos");
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 				break;

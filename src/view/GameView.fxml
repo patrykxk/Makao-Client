@@ -38,8 +38,9 @@
       </StackPane>
       <Button fx:id="startGameButton" layoutX="328.0" layoutY="274.0" mnemonicParsing="false" onAction="#startGame" prefHeight="67.0" prefWidth="145.0" styleClass="loginPanel" stylesheets="@../application/application.css" text="Zacznij grę" AnchorPane.leftAnchor="328.0" AnchorPane.topAnchor="274.0" />
       <HBox fx:id="hbox" alignment="CENTER" layoutX="300.0" layoutY="10.0" prefHeight="200.0" prefWidth="538.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="20.0" />
-      <HBox fx:id="buttons" layoutX="308.0" layoutY="317.0" prefHeight="20.0" prefWidth="250.0" spacing="5.0" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="450.0">
+      <HBox fx:id="buttons" layoutX="377.0" layoutY="317.0" prefHeight="25.0" prefWidth="323.0" spacing="5.0" AnchorPane.bottomAnchor="225.0" AnchorPane.leftAnchor="377.0">
          <children>
+            <Button fx:id="takePenaltyCardsButton" mnemonicParsing="false" onAction="#takePenaltyCards" text="Weź karty" />
             <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirm" text="Zatwierdź" />
             <Button fx:id="takeCardButton" mnemonicParsing="false" onAction="#takeCard" text="Weź kartę" />
             <Button fx:id="endTurnButton" mnemonicParsing="false" onAction="#endTurn" text=" Zakończ ruch" />

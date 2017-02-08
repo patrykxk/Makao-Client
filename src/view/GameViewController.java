@@ -24,7 +24,7 @@ public class GameViewController {
     @FXML private Button startGameButton;
     @FXML private Button confirmButton;
     @FXML private Button endTurnButton;
- 
+    @FXML private Button takePenaltyCardsButton;
 	DataFromServer clientData = null;
 	Client client;
 	
@@ -34,29 +34,75 @@ public class GameViewController {
 	
 	public void setDataFromServer(DataFromServer dataFromServer){
 		switch(dataFromServer.getPacketId()){
-			case 1:
+			case 1: //start packet
 				clientData = dataFromServer;
 				break;
-			case 2:
+			case 2: //endTurn packet
 				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
 				checkWhosTurn();
 				break;
-			case 3:
+			case 3: //takeCard packet
 				for(Card card : dataFromServer.getClientCards())
 					clientData.getClientCards().add(card);
+				setClientCardsClickability();
 				showClientCards();
 				takeCardButton.setVisible(false);
 				endTurnButton.setVisible(true);
 				break;
-			case 4:
+			case 4: //normal queue packet
+				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
+				if(!(dataFromServer.getCardsOnTable()==null)){
+					for(Card card : dataFromServer.getCardsOnTable()){
+						clientData.getCardsOnTable().add(card);
+					}
+				}
+				takeCardButton.setVisible(true);
+				setClientCardsClickability();
+				showClientCards();
+				showCardsOnTable();
+				checkWhosTurn();
+				break;
+			case 5: // TWO is on Table
 				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
 				for(Card card : dataFromServer.getCardsOnTable()){
 					clientData.getCardsOnTable().add(card);
 				}
-				checkClientCardsClickability();
+				takePenaltyCardsButton.setVisible(true);
+				takeCardButton.setVisible(true);
+				setClientCardsClickability("TWO", "THREE");
 				showClientCards();
 				showCardsOnTable();
-				checkWhosTurn();
+				break;
+			case 6: // THREE is on Table
+				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
+				for(Card card : dataFromServer.getCardsOnTable()){
+					clientData.getCardsOnTable().add(card);
+				}
+				takePenaltyCardsButton.setVisible(true);
+				takeCardButton.setVisible(true);
+				setClientCardsClickability("THREE", "TWO");
+				showClientCards();
+				showCardsOnTable();
+				break;
+			case 7:
+				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
+				for(Card card : dataFromServer.getCardsOnTable()){
+					clientData.getCardsOnTable().add(card);
+				}
+				takeCardButton.setVisible(true);
+				setClientCardsClickabilityByValue("FOUR");
+				showClientCards();
+				showCardsOnTable();
+				break;
+			case 8:
+				clientData.setWhoseTurn(dataFromServer.getWhoseTurn());
+				for(Card card : dataFromServer.getCardsOnTable()){
+					clientData.getCardsOnTable().add(card);
+				}
+				takeCardButton.setVisible(true);
+				setClientCardsClickability();
+				showClientCards();
+				showCardsOnTable();
 				break;
 		}
 	}
@@ -66,9 +112,52 @@ public class GameViewController {
 	public void initialize(){
 		buttons.setVisible(false);
 		endTurnButton.setVisible(false);
+		takePenaltyCardsButton.setVisible(false);
 	}
 	
+
+	@FXML
+	private void startGame(){
+		checkWhosTurn();
+		buttons.setVisible(true);
+		confirmButton.setVisible(false);
+		showClientCards();
+		showCardsOnTable();
+		startGameButton.setVisible(false);
 	
+	}
+	
+	@FXML
+	private void takeCard(){
+		client.sendEmptyPacket(3);
+	}
+	@FXML
+    void takePenaltyCards() {
+		client.sendEmptyPacket(4);
+		takePenaltyCardsButton.setVisible(false);
+    }
+	
+	@FXML
+    private void confirm() {
+		for(Card card : cardsClicked){
+			clientData.getClientCards().remove(card);
+		}
+		System.out.println(cardsClicked.get(0).getCardValue() +" "+ cardsClicked.get(0).getSuit() );
+		DataFromClient dataFromClient = new DataFromClient(1, cardsClicked);
+		client.sendPackage(dataFromClient);
+		checkWhosTurn();
+		showClientCards();
+		System.out.println("cardsClicked.size(): "+cardsClicked.size());
+		cardsClicked.clear();
+		confirmButton.setVisible(false);
+		endTurnButton.setVisible(false);
+    }
+	@FXML
+    void endTurn() {
+		client.sendEmptyPacket(2);
+		endTurnButton.setVisible(false);
+		takeCardButton.setVisible(true);
+    }
 	private void checkWhosTurn(){
 		int clientId = clientData.getClientId();
 		System.out.println("ID: " + clientId);
@@ -81,52 +170,51 @@ public class GameViewController {
 			confirmButton.setDisable(false);
 		}
 	}
-	@FXML
-	private void startGame(){
-		checkWhosTurn();
-		buttons.setVisible(true);
-
-		showClientCards();
-		showCardsOnTable();
-		
-		startGameButton.setVisible(false);
 	
-	}
-	
-	@FXML
-	private void takeCard(){
-		client.takeCard();
-	}
-	
-	@FXML
-    private void confirm() {
-		
-		for(Card card : cardsClicked){
-			clientData.getClientCards().remove(card);
-		}
-		DataFromClient dataFromClient = new DataFromClient(1, cardsClicked);
-		client.sendPackage(dataFromClient);
-		//clientData.setWhoseTurn(clientData.getWhoseTurn()+1);
-		checkWhosTurn();
-		showClientCards();
-		cardsClicked.clear();
-    }
-	@FXML
-    void endTurn() {
-		client.endTurn();
-		endTurnButton.setVisible(false);
-    }
-	
-	private void checkClientCardsClickability(){
+	private void setClientCardsClickability(){
 		CardValue cardOnTableValue = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getCardValue();
 		Suit cardOnTableSuit = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getSuit();
 		for(Card card : clientData.getClientCards()){
 			if((card.getCardValue().equals(cardOnTableValue)) || (card.getSuit().equals(cardOnTableSuit))){
 				card.setClickable(true);
-			}else
+			}else{
 				card.setClickable(false);
+			}
 		}
-		
+	}
+	private void setClientCardsClickability(String cardValue, String secondCardValue){
+		CardValue cardOnTableValue = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getCardValue();
+		Suit cardOnTableSuit = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getSuit();
+		for(Card card : clientData.getClientCards()){
+			if(((card.getCardValue().toString().equals(cardValue)) 
+					|| ((card.getCardValue().toString().equals(secondCardValue))&& card.getSuit().equals(cardOnTableSuit)))){
+				card.setClickable(true);
+			}else{
+				card.setClickable(false);
+			}
+		}
+	}
+	private void setClientCardsClickabilityBySuit(String cardSuit){
+		CardValue cardOnTableValue = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getCardValue();
+		Suit cardOnTableSuit = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getSuit();
+		for(Card card : clientData.getClientCards()){
+			if(card.getSuit().toString().equals(cardSuit)){
+				card.setClickable(true);
+			}else{
+				card.setClickable(false);
+			}
+		}
+	}
+	private void setClientCardsClickabilityByValue(String cardValue){
+		CardValue cardOnTableValue = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getCardValue();
+		Suit cardOnTableSuit = clientData.getCardsOnTable().get(clientData.getCardsOnTable().size()-1).getSuit();
+		for(Card card : clientData.getClientCards()){
+			if(card.getCardValue().toString().equals(cardValue)){
+				card.setClickable(true);
+			}else{
+				card.setClickable(false);
+			}
+		}
 	}
 	
 	ArrayList<Card> cardsClicked = new ArrayList<Card>();

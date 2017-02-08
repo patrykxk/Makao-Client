@@ -43,17 +43,13 @@ public class Client {
 	    }
 	}
 	
-	
-	public void takeCard(){
-		DataFromClient dataFromClient = new DataFromClient(3);
-		sendPackage(dataFromClient);
-	}
-	public void endTurn(){
-		DataFromClient dataFromClient = new DataFromClient(2);
+	public void sendEmptyPacket(int noOfPacket){
+		DataFromClient dataFromClient = new DataFromClient(noOfPacket);
 		sendPackage(dataFromClient);
 	}
 	public void sendPackage(DataFromClient dataFromClient){
 		try {
+			objectOutputStream.reset();
 			objectOutputStream.writeObject(dataFromClient);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -64,5 +60,6 @@ public class Client {
 	public void startReadingData(GameViewController gameViewcontroller){
 		new Thread(new DataReader(objectInputStream, gameViewcontroller)).start();
 	}
+	
 	
 }
