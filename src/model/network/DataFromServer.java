@@ -14,6 +14,7 @@ public class DataFromServer implements Serializable {
 	private int whoseTurn;
 	private int clientId;
 	private int packetId;
+	private String request;
 
 	
 	public ArrayList<Card> getCardsOnTable() {
@@ -45,6 +46,9 @@ public class DataFromServer implements Serializable {
 
 	public void setWhoseTurn(int whoseTurn) {
 		this.whoseTurn = whoseTurn;		
+	}
+	public String getRequest(){
+		return request;
 	}
 
 }

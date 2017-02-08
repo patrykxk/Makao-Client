@@ -14,3 +14,19 @@
 	-fx-border-width:2px;
 
 }
+.myDialog{
+	-fx-background-color: black;
+}
+#heartsButton{
+	-fx-background-color:black;
+	/*-fx-background-image: url("../../src/resources/images/hearts.jpg");*/
+}
+#spadesButton{
+	-fx-background-image: url("../../src/resources/images/spades.jpg");
+}
+#clubsButton{
+	-fx-background-image: url("../../src/resources/images/clubs.jpg");
+}
+#diamondsButton{
+	-fx-background-image: url("../../src/resources/images/diamonds.jpg");
+}
