@@ -46,6 +46,5 @@
             <Button fx:id="endTurnButton" mnemonicParsing="false" onAction="#endTurn" text=" Zakończ ruch" />
          </children>
       </HBox>
-      <Button layoutX="137.0" layoutY="295.0" mnemonicParsing="false" fx:id="popupButton" onAction="#jackChooseReqest" prefHeight="25.0" prefWidth="107.0" text="Popup" />
    </children>
 </AnchorPane>

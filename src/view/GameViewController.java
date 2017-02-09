@@ -167,7 +167,7 @@ public class GameViewController {
 		buttons.setVisible(false);
 		endTurnButton.setVisible(false);
 		takePenaltyCardsButton.setVisible(false);
-		
+		popupButton.setVisible(false);
 	}
 	
 
@@ -179,7 +179,7 @@ public class GameViewController {
 		showClientCards();
 		showCardsOnTable();
 		startGameButton.setVisible(false);
-		//popupButton.setVisible(false);
+		
 	}
 	
 	@FXML
@@ -316,11 +316,16 @@ public class GameViewController {
 		}
 	}
 	private void showCardsOnTable(){
-		
 		double cardsOnTableTranslateX = 0;
 		hboxCenter.getChildren().clear();
-		for(Card card : clientData.getCardsOnTable()){
+		int i = 0;
+		if(clientData.getCardsOnTable().size()>3){
+			i = clientData.getCardsOnTable().size()-3;
+		}
+			
+		for(i=i; i<clientData.getCardsOnTable().size();i++){
 			ImageView imageView = new ImageView();
+			Card card = clientData.getCardsOnTable().get(i);
 			String path = "../resources/images/" + card.getCardValue() + "_of_" + card.getSuit().toString().toLowerCase() +".png";
 			Image image = new Image(getClass().getResourceAsStream(path));
 			imageView.setImage(image);
@@ -339,7 +344,7 @@ public class GameViewController {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Rz¹danie");
 		alert.setHeaderText("Wybierz jaki kolor kart rz¹dasz:");
-		alert.initModality(Modality.WINDOW_MODAL);
+		alert.initModality(Modality.APPLICATION_MODAL);
 		
 		ButtonType diamondsButton = new ButtonType("Karo");
 		ButtonType heartsButton = new ButtonType("Kier");
@@ -379,7 +384,7 @@ public class GameViewController {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Rz¹danie");
 		alert.setHeaderText("Wybierz wartoœæ karty której rz¹dasz:");
-		alert.initModality(Modality.WINDOW_MODAL);
+		alert.initModality(Modality.APPLICATION_MODAL);
 		
 		ButtonType button5 = new ButtonType("5");
 		ButtonType button6 = new ButtonType("6");
@@ -420,6 +425,5 @@ public class GameViewController {
 
 		DataFromClient dataFromClient = new DataFromClient(6, choose);
 		client.sendPackage(dataFromClient);
-		System.out.println("po wyslaniu");
     }
 }
