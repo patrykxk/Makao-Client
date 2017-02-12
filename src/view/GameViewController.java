@@ -23,10 +23,9 @@ import model.network.DataFromClient;
 import model.network.DataFromServer;
 
 public class GameViewController {
-	@FXML private ImageView card1;
-	@FXML private HBox hbox;
+	@FXML private HBox clientCardsHBox;
 	@FXML private HBox hboxCenter;
-	@FXML private HBox buttons;
+	@FXML private HBox buttonsHBox;
 	@FXML private Button takeCardButton;
     @FXML private Button startGameButton;
     @FXML private Button confirmButton;
@@ -156,7 +155,7 @@ public class GameViewController {
 
 	@FXML
 	public void initialize(){
-		buttons.setVisible(false);
+		buttonsHBox.setVisible(false);
 		endTurnButton.setVisible(false);
 		takePenaltyCardsButton.setVisible(false);
 	}
@@ -165,7 +164,7 @@ public class GameViewController {
 	@FXML
 	private void startGame(){
 		checkWhosTurn();
-		buttons.setVisible(true);
+		buttonsHBox.setVisible(true);
 		confirmButton.setVisible(false);
 		showClientCards();
 		showCardsOnTable();
@@ -176,6 +175,7 @@ public class GameViewController {
 	@FXML
 	private void takeCard(){
 		client.sendEmptyPacket(3);
+		hBoxTranslateX -= 10;
 	}
 	@FXML
     void takePenaltyCards() {
@@ -201,6 +201,7 @@ public class GameViewController {
 		if(clientData.getClientCards().isEmpty()){
 			gameWonAlert();
 		}
+		hBoxTranslateX += 14;
     }
 	@FXML
     void endTurn() {
@@ -285,10 +286,11 @@ public class GameViewController {
 			}
 		}
 	}
-	
+	private double hBoxTranslateX = 0;
 	private void showClientCards(){
 		double clientCardsTranslateX = 0;
-		hbox.getChildren().clear();
+		System.out.println("SHOW");
+		clientCardsHBox.getChildren().clear();
 		for(Card card : clientData.getClientCards()){
 			ImageView imageView = new ImageView();
 			String path = "../resources/images/" + card.getCardValue() + "_of_" + card.getSuit().toString().toLowerCase() +".png";
@@ -304,10 +306,14 @@ public class GameViewController {
 				    }
 				});
 			}
-			hbox.getChildren().add(imageView);
-		
+			clientCardsHBox.getChildren().add(imageView);
+			
+			//hBoxTranslateX += 25;
 			clientCardsTranslateX-=100;
 		}
+		
+		clientCardsHBox.setTranslateX(hBoxTranslateX);
+		
 	}
 	private void showCardsOnTable(){
 		double cardsOnTableTranslateX = 0;
@@ -332,6 +338,7 @@ public class GameViewController {
 		
 			cardsOnTableTranslateX-=100;
 		}
+		
 
 	}
 	void aceChooseReqest() {
