@@ -10,7 +10,7 @@ public class Card implements Serializable {
 	private Suit suit;
 	private CardValue cardValue;
 	 
-	public Card (CardValue cardValue, Suit suit){
+	public Card(CardValue cardValue, Suit suit){
 		this.cardValue = cardValue;
 		this.suit = suit;
 	}

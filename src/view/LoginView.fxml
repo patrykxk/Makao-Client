@@ -64,14 +64,5 @@
             </GridPane>
          </center>
       </BorderPane>
-      <MenuBar id="menuBar" layoutY="2.0" stylesheets="@../application/application.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
    </children>
 </AnchorPane>

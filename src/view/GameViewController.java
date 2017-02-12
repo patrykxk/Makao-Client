@@ -1,13 +1,9 @@
 package view;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
-
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -18,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.cards.Card;
 import model.cards.CardValue;
@@ -37,12 +32,10 @@ public class GameViewController {
     @FXML private Button confirmButton;
     @FXML private Button endTurnButton;
     @FXML private Button takePenaltyCardsButton;
-    @FXML private Button popupButton;
     
-	DataFromServer clientData = null;
-	Client client;
+	private DataFromServer clientData = null;
+	private Client client;
 	
-    
 	public void setClient(Client client){
 		this.client = client;
 	}
@@ -157,7 +150,6 @@ public class GameViewController {
 				showCardsOnTable();
 				checkWhosTurn();
 				break;
-				
 		}
 	}
 	
@@ -167,7 +159,6 @@ public class GameViewController {
 		buttons.setVisible(false);
 		endTurnButton.setVisible(false);
 		takePenaltyCardsButton.setVisible(false);
-		popupButton.setVisible(false);
 	}
 	
 
@@ -207,6 +198,9 @@ public class GameViewController {
 		confirmButton.setVisible(false);
 		endTurnButton.setVisible(false);
 		takePenaltyCardsButton.setVisible(false);
+		if(clientData.getClientCards().isEmpty()){
+			gameWonAlert();
+		}
     }
 	@FXML
     void endTurn() {
@@ -379,7 +373,7 @@ public class GameViewController {
 		client.sendPackage(dataFromClient);
 		System.out.println("po wyslaniu");
     }
-	@FXML
+	
 	void jackChooseReqest() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Rz¹danie");
@@ -426,4 +420,39 @@ public class GameViewController {
 		DataFromClient dataFromClient = new DataFromClient(6, choose);
 		client.sendPackage(dataFromClient);
     }
+	public void serverNotRespondAlert(){
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("B³¹d!");
+		alert.setHeaderText("Server nie odpowiada lub zakoñczy³ pracê.");
+		alert.initStyle(StageStyle.UTILITY);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			client.closeStreams();
+		   	System.exit(0);
+		}
+	}
+	public void serverConnectionAlert(){
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("B³¹d!");
+		alert.setHeaderText("Nie mo¿na po³¹czyæ siê z serwerem!");
+		alert.initStyle(StageStyle.UTILITY);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+		   	System.exit(0);
+		}
+	}
+	public void gameWonAlert(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Makao");
+		alert.setHeaderText("Gratulacje, wygra³eœ!");
+		alert.setContentText("Makao, po makale");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			client.closeStreams();
+		   	System.exit(0);
+		}
+	}
 }

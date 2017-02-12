@@ -16,7 +16,7 @@ public class main extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Gra");
-
+        primaryStage.setResizable(false);
         initRootLayout();
     }
 
