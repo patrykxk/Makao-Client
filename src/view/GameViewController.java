@@ -9,6 +9,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -31,6 +32,8 @@ public class GameViewController {
     @FXML private Button confirmButton;
     @FXML private Button endTurnButton;
     @FXML private Button takePenaltyCardsButton;
+    @FXML private Label messageLabel;
+    @FXML private Label whoseTurnLabel;
     
 	private DataFromServer clientData = null;
 	private Client client;
@@ -40,6 +43,7 @@ public class GameViewController {
 	}
 	
 	public void setDataFromServer(DataFromServer dataFromServer){
+		
 		switch(dataFromServer.getPacketId()){
 			case 1: //start packet
 				clientData = dataFromServer;
@@ -129,8 +133,9 @@ public class GameViewController {
 					}
 				}
 				takeCardButton.setVisible(true);
-				System.out.println(dataFromServer.getRequest());
-				setClientCardsClickabilityBySuit(dataFromServer.getRequest());
+				messageLabel.setText("¯¹danie " + translateSuit(dataFromServer.getString()));
+				System.out.println(dataFromServer.getString());
+				setClientCardsClickabilityBySuit(dataFromServer.getString());
 				showClientCards();
 				showCardsOnTable();
 				checkWhosTurn();
@@ -143,11 +148,23 @@ public class GameViewController {
 					}
 				}
 				takeCardButton.setVisible(true);
-				System.out.println(dataFromServer.getRequest());
-				setClientCardsClickabilityByValue(dataFromServer.getRequest());
+				messageLabel.setText("¯¹danie " + translateValue(dataFromServer.getString()));
+				System.out.println(dataFromServer.getString());
+				setClientCardsClickabilityByValue(dataFromServer.getString());
 				showClientCards();
 				showCardsOnTable();
 				checkWhosTurn();
+				break;
+			case 13: //new player
+				clientData.setClientsLogins(dataFromServer.getClientsLogins());
+				messageLabel.setText("Gracz " +  dataFromServer.getClientsLogins().get(dataFromServer.getWhoseTurn()) + " do³¹czy³ do sto³u");
+				checkWhosTurn();
+				System.out.println("Nowy Gracz o loginie " +  dataFromServer.getString());
+				break;
+			case 14: //player has left
+				messageLabel.setText("Gracz " +  dataFromServer.getClientsLogins().get(dataFromServer.getWhoseTurn()) + " opuœci³ stó³");
+				//checkWhosTurn();
+				System.out.println("Wyszed³ gracz o loginie " +  dataFromServer.getString());
 				break;
 		}
 	}
@@ -169,7 +186,6 @@ public class GameViewController {
 		showClientCards();
 		showCardsOnTable();
 		startGameButton.setVisible(false);
-		
 	}
 	
 	@FXML
@@ -202,6 +218,7 @@ public class GameViewController {
 			gameWonAlert();
 		}
 		hBoxTranslateX += 14;
+		messageLabel.setText("");
     }
 	@FXML
     void endTurn() {
@@ -212,7 +229,10 @@ public class GameViewController {
 	private void checkWhosTurn(){
 		int clientId = clientData.getClientId();
 		System.out.println("ID: " + clientId);
-		System.out.println("whosetrn: " + clientData.getWhoseTurn());
+		if(clientData.getClientsLogins()!=null){
+			System.out.println("whosetrn: " + clientData.getWhoseTurn() + " "+ clientData.getClientsLogins().get(clientData.getWhoseTurn()));
+			whoseTurnLabel.setText("Ruch gracza: "+ clientData.getClientsLogins().get(clientData.getWhoseTurn()));
+		}
 		if(clientData.getWhoseTurn()!=clientId){
 			takeCardButton.setDisable(true);
 			confirmButton.setDisable(true);
@@ -220,6 +240,8 @@ public class GameViewController {
 			takeCardButton.setDisable(false);
 			confirmButton.setDisable(false);
 		}
+		
+		
 	}
 	
 	private void setClientCardsClickability(){
@@ -343,8 +365,8 @@ public class GameViewController {
 	}
 	void aceChooseReqest() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Rz¹danie");
-		alert.setHeaderText("Wybierz jaki kolor kart rz¹dasz:");
+		alert.setTitle("¯¹danie");
+		alert.setHeaderText("Wybierz jaki kolor kart ¿¹dasz:");
 		alert.initModality(Modality.APPLICATION_MODAL);
 		
 		ButtonType diamondsButton = new ButtonType("Karo");
@@ -383,8 +405,8 @@ public class GameViewController {
 	
 	void jackChooseReqest() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Rz¹danie");
-		alert.setHeaderText("Wybierz wartoœæ karty której rz¹dasz:");
+		alert.setTitle("¯¹danie");
+		alert.setHeaderText("Wybierz wartoœæ karty której ¿¹dasz:");
 		alert.initModality(Modality.APPLICATION_MODAL);
 		
 		ButtonType button5 = new ButtonType("5");
@@ -461,5 +483,51 @@ public class GameViewController {
 			client.closeStreams();
 		   	System.exit(0);
 		}
+	}
+	public String translateSuit(String suit){
+		String result = suit;
+		switch(suit){
+			case "DIAMONDS":
+				result = "Karo";
+				break;
+			case "CLUBS":
+				result = "Trefl";
+				break;
+			case "SPADES":
+				result = "Pik";
+				break;
+			case "HEART":
+				result = "Kier";
+				break;
+			
+		}
+		return result;
+	}
+	
+	public String translateValue(String value){
+
+		String result = value;
+		switch(value){
+			case "FIVE":
+				result = "5";
+				break;
+			case "SIX":
+				result = "6";
+				break;
+			case "SEVEN":
+				result = "7";
+				break;
+			case "EIGHT":
+				result = "8";
+				break;
+			case "NINE":
+				result = "9";
+				break;
+			case "TEN":
+				result = "10";
+				break;
+			
+		}
+		return result;
 	}
 }

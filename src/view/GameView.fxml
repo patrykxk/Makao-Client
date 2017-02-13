@@ -18,7 +18,7 @@
 
 <AnchorPane id="mainAnchor" fx:id="mainAnchor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GameViewController">
    <children>
-      <StackPane layoutX="121.0" layoutY="266.0" prefHeight="200.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0">
+      <StackPane layoutX="121.0" layoutY="266.0" prefHeight="200.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="100.0">
          <children>
             <HBox fx:id="hboxCenter" prefHeight="100.0" prefWidth="200.0" />
          </children>
@@ -37,5 +37,7 @@
             <Button fx:id="endTurnButton" mnemonicParsing="false" onAction="#endTurn" text=" Zakończ ruch" />
          </children>
       </HBox>
+      <Label fx:id="messageLabel" layoutX="30.0" layoutY="354.0" prefHeight="17.0" prefWidth="240.0" textFill="WHITE" AnchorPane.leftAnchor="30.0" />
+      <Label fx:id="whoseTurnLabel" layoutX="30.0" layoutY="324.0" prefHeight="17.0" prefWidth="240.0" textFill="WHITE" />
    </children>
 </AnchorPane>

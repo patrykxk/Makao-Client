@@ -46,6 +46,8 @@ public class Client {
 	        clientSocket = new Socket(host, portNumber);
 	        objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 	        objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+	        
+	        sendPackage(new DataFromClient(7, login));
 	    } catch (UnknownHostException e) {
 	    	System.err.println("Unknown host: " + host);
 	    }
